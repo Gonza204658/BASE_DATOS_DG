@@ -1,0 +1,123 @@
+-- public.riwi_categoria definition
+
+-- Drop table
+
+-- DROP TABLE riwi_categoria;
+
+CREATE TABLE riwi_categoria (
+	id serial4 NOT NULL,
+	nombre varchar(100) NOT NULL,
+	CONSTRAINT riwi_categoria_pkey PRIMARY KEY (id)
+);
+
+
+-- public.riwi_ciudad definition
+
+-- Drop table
+
+-- DROP TABLE riwi_ciudad;
+
+CREATE TABLE riwi_ciudad (
+	id serial4 NOT NULL,
+	nombre varchar(100) NOT NULL,
+	CONSTRAINT riwi_ciudad_pkey PRIMARY KEY (id)
+);
+
+
+-- public.riwi_almacen definition
+
+-- Drop table
+
+-- DROP TABLE riwi_almacen;
+
+CREATE TABLE riwi_almacen (
+	id serial4 NOT NULL,
+	nombre varchar(100) NOT NULL,
+	ciudad_id int4 NOT NULL,
+	CONSTRAINT riwi_almacen_pkey PRIMARY KEY (id),
+	CONSTRAINT riwi_almacen_ciudad_id_fkey FOREIGN KEY (ciudad_id) REFERENCES riwi_ciudad(id)
+);
+
+
+-- public.riwi_producto definition
+
+-- Drop table
+
+-- DROP TABLE riwi_producto;
+
+CREATE TABLE riwi_producto (
+	id serial4 NOT NULL,
+	nombre varchar(100) NOT NULL,
+	precio_unitario numeric(10, 2) NOT NULL,
+	categoria_id int4 NOT NULL,
+	CONSTRAINT riwi_producto_pkey PRIMARY KEY (id),
+	CONSTRAINT riwi_producto_categoria_id_fkey FOREIGN KEY (categoria_id) REFERENCES riwi_categoria(id)
+);
+
+
+-- public.riwi_proveedor definition
+
+-- Drop table
+
+-- DROP TABLE riwi_proveedor;
+
+CREATE TABLE riwi_proveedor (
+	id serial4 NOT NULL,
+	nombre varchar(100) NOT NULL,
+	ciudad_id int4 NOT NULL,
+	CONSTRAINT riwi_proveedor_pkey PRIMARY KEY (id),
+	CONSTRAINT riwi_proveedor_ciudad_id_fkey FOREIGN KEY (ciudad_id) REFERENCES riwi_ciudad(id)
+);
+
+
+-- public.riwi_compra definition
+
+-- Drop table
+
+-- DROP TABLE riwi_compra;
+
+CREATE TABLE riwi_compra (
+	id serial4 NOT NULL,
+	orden_compra varchar(50) NOT NULL,
+	fecha_movimiento date NOT NULL,
+	proveedor_id int4 NOT NULL,
+	CONSTRAINT riwi_compra_pkey PRIMARY KEY (id),
+	CONSTRAINT riwi_compra_proveedor_id_fkey FOREIGN KEY (proveedor_id) REFERENCES riwi_proveedor(id)
+);
+
+
+-- public.riwi_detalle_compra definition
+
+-- Drop table
+
+-- DROP TABLE riwi_detalle_compra;
+
+CREATE TABLE riwi_detalle_compra (
+	id serial4 NOT NULL,
+	compra_id int4 NOT NULL,
+	producto_id int4 NOT NULL,
+	cantidad int4 NOT NULL,
+	precio_unitario numeric(10, 2) NOT NULL,
+	CONSTRAINT riwi_detalle_compra_pkey PRIMARY KEY (id),
+	CONSTRAINT riwi_detalle_compra_compra_id_fkey FOREIGN KEY (compra_id) REFERENCES riwi_compra(id),
+	CONSTRAINT riwi_detalle_compra_producto_id_fkey FOREIGN KEY (producto_id) REFERENCES riwi_producto(id)
+);
+
+
+-- public.riwi_movimiento_inventario definition
+
+-- Drop table
+
+-- DROP TABLE riwi_movimiento_inventario;
+
+CREATE TABLE riwi_movimiento_inventario (
+	id serial4 NOT NULL,
+	tipo_movimiento varchar(20) NOT NULL,
+	cantidad int4 NOT NULL,
+	fecha_movimiento date NOT NULL,
+	almacen_id int4 NOT NULL,
+	producto_id int4 NOT NULL,
+	CONSTRAINT riwi_movimiento_inventario_pkey PRIMARY KEY (id),
+	CONSTRAINT riwi_movimiento_inventario_almacen_id_fkey FOREIGN KEY (almacen_id) REFERENCES riwi_almacen(id),
+	CONSTRAINT riwi_movimiento_inventario_producto_id_fkey FOREIGN KEY (producto_id) REFERENCES riwi_producto(id)
+);
